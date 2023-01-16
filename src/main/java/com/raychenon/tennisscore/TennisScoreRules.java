@@ -35,6 +35,16 @@ public class TennisScoreRules {
         }
     }
 
+
+    protected boolean hasWinner() {
+        if (repository.getScoreB() >= 4 && repository.getScoreB() >= repository.getScoreA() + 2)
+            return true;
+        if (repository.getScoreA() >= 4 && repository.getScoreA() >= repository.getScoreB() + 2)
+            return true;
+        return false;
+    }
+
+
     /**
      * “Player A : 15 / Player B : 0”
      * “Player A : 15 / Player B : 15”
@@ -42,8 +52,17 @@ public class TennisScoreRules {
      * @return
      */
     private String makeSentenceOnCurrentScore() {
+        if (hasWinner()) {
+            return MessageFormat.format("Player {0} wins the game", whoIsWinning());
+        }
+
+
         String result = MessageFormat.format("Player A : {0} / Player B : {1}", translateScoreToString(repository.getScoreA()), translateScoreToString(repository.getScoreB()));
         return result;
+    }
+
+    private Player whoIsWinning() {
+        return (repository.getScoreA() > repository.getScoreB()) ? Player.A : Player.B;
     }
 
     private String translateScoreToString(int score) throws IllegalArgumentException {
