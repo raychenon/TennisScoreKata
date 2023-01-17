@@ -19,7 +19,9 @@ public class TennisScoreRules {
             if (ch == 'A') markPointForPlayer(Player.A);
             else if (ch == 'B') markPointForPlayer(Player.B);
 
-            str.append(makeSentenceOnCurrentScore()).append("\n");
+            str.append(makeSentenceOnCurrentScore()).append("\n")
+                    .append(debugScore());
+
         }
         return str.toString();
     }
@@ -43,34 +45,36 @@ public class TennisScoreRules {
 
 
     protected boolean hasWinner() {
-        if (repository.getScoreB() >= 4 && repository.getScoreB() >= repository.getScoreA() + 2)
+        if ((repository.getScoreB() >= 4 && repository.getScoreB() >= repository.getScoreA() + 2) ||
+            (repository.getScoreA() >= 4 && repository.getScoreA() >= repository.getScoreB() + 2)) {
             return true;
-        if (repository.getScoreA() >= 4 && repository.getScoreA() >= repository.getScoreB() + 2)
-            return true;
-        return false;
+        } else {
+            return false;
+        }
     }
 
 
     /**
-     * “Player A : 15 / Player B : 0”
-     * “Player A : 15 / Player B : 15”
-     *
+     * Comment on the current score ( score, Deuce, Advantage, Player wins)
+     * return a string on the current score state
      */
     private String makeSentenceOnCurrentScore() {
         if (hasWinner()) {
             return MessageFormat.format("Player {0} wins the game", whoIsWinning());
         } else if (isDeuceAdvantage()) {
-            return MessageFormat.format("Advantage, player {0}", whoIsWinning()) + debugScore();
+            return MessageFormat.format("Advantage, player {0}", whoIsWinning());
         }
         if (isDeuce()) {
-            return "Deuce" + debugScore();
+            return "Deuce";
         }
 
-        return MessageFormat.format("Player A : {0} / Player B : {1}", translateScoreToString(repository.getScoreA()), translateScoreToString(repository.getScoreB())) + debugScore();
+        return MessageFormat.format("Player A : {0} / Player B : {1}", translateScoreToString(repository.getScoreA()), translateScoreToString(repository.getScoreB()));
     }
 
     private String debugScore(){
-        logger.debug(" | scoreA = " + repository.getScoreA() + " ,scoreB = " + repository.getScoreB());
+        var str = " |> scoreA = " + repository.getScoreA() + " , scoreB = " + repository.getScoreB();
+        logger.info(str);
+        // return str + "\n";
         return "";
     }
 
@@ -87,6 +91,10 @@ public class TennisScoreRules {
         return repository.getScoreA()  >= 3 && repository.getScoreB()  >= 3;
     }
 
+    /**
+     * If the player with advantage wins the ball he wins the game
+     * If the player without advantage wins the ball they are back at “deuce”.
+     */
     private boolean isDeuceAdvantage() {
         if ((repository.getScoreA() >= 4 && repository.getScoreA() == repository.getScoreB() + 1) ||
             (repository.getScoreB() >= 4 && repository.getScoreB() == repository.getScoreA() + 1)
