@@ -1,8 +1,14 @@
 package com.raychenon.tennisscore;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.MessageFormat;
 
 public class TennisScoreRules {
+
+    private static Logger logger = LoggerFactory.getLogger(TennisScoreRules.class);
+
     private ScoreRepository repository;
 
     public String generateScore(String input) {
@@ -49,20 +55,23 @@ public class TennisScoreRules {
      * “Player A : 15 / Player B : 0”
      * “Player A : 15 / Player B : 15”
      *
-     * @return
      */
     private String makeSentenceOnCurrentScore() {
         if (hasWinner()) {
             return MessageFormat.format("Player {0} wins the game", whoIsWinning());
-        }else if(isDeuceAdvantage()){
-            return MessageFormat.format("Advantage, player {0}", whoIsWinning());
+        } else if (isDeuceAdvantage()) {
+            return MessageFormat.format("Advantage, player {0}", whoIsWinning()) + debugScore();
         }
-        if(isDeuce()){
-            return "Deuce";
+        if (isDeuce()) {
+            return "Deuce" + debugScore();
         }
 
-        String result = MessageFormat.format("Player A : {0} / Player B : {1}", translateScoreToString(repository.getScoreA()), translateScoreToString(repository.getScoreB()));
-        return result;
+        return MessageFormat.format("Player A : {0} / Player B : {1}", translateScoreToString(repository.getScoreA()), translateScoreToString(repository.getScoreB())) + debugScore();
+    }
+
+    private String debugScore(){
+        logger.debug(" | scoreA = " + repository.getScoreA() + " ,scoreB = " + repository.getScoreB());
+        return "";
     }
 
     private Player whoIsWinning() {
@@ -79,8 +88,8 @@ public class TennisScoreRules {
     }
 
     private boolean isDeuceAdvantage() {
-        if ((repository.getScoreA() >= 3 && repository.getScoreA() == repository.getScoreB() + 1) ||
-            (repository.getScoreB() >= 3 && repository.getScoreB() == repository.getScoreA() + 1)
+        if ((repository.getScoreA() >= 4 && repository.getScoreA() == repository.getScoreB() + 1) ||
+            (repository.getScoreB() >= 4 && repository.getScoreB() == repository.getScoreA() + 1)
         ) {
             return true;
         } else {

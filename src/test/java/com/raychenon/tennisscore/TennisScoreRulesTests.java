@@ -58,7 +58,7 @@ public class TennisScoreRulesTests {
                 Player A : 15 / Player B : 15
                 Player A : 30 / Player B : 15
                 Player A : 30 / Player B : 30
-                Advantage, player A
+                Player A : 40 / Player B : 30
                 Deuce
                 Advantage, player A
                 Deuce
@@ -79,7 +79,7 @@ public class TennisScoreRulesTests {
                 Player A : 15 / Player B : 15
                 Player A : 30 / Player B : 15
                 Player A : 30 / Player B : 30
-                Advantage, player A
+                Player A : 40 / Player B : 30
                 Deuce
                 Advantage, player A
                 Deuce
