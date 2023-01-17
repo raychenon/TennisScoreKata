@@ -26,3 +26,13 @@ For example the following input “ABABAA” should print :
 # Usage
 - use Java JDK 17
 - command ```./gradlew clean build```
+
+## Done
+
+Each player starts a game with 0 point.
+- [x] If the player wins the 1st ball, he will have 15 points. 2nd balls won : 30 points. 3rd ball won : 40points.
+- [x] If a player have 40 points and wins the ball, he wins the game, however there are special rules.
+- [x] If both players have 40 points the players are “deuce”.
+- [x] If the game is in deuce, the winner of the ball will have advantage
+- [x] If the player with advantage wins the ball he wins the game
+- [x] If the player without advantage wins the ball they are back at “deuce”.
