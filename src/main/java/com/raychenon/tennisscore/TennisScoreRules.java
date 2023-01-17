@@ -54,8 +54,12 @@ public class TennisScoreRules {
     private String makeSentenceOnCurrentScore() {
         if (hasWinner()) {
             return MessageFormat.format("Player {0} wins the game", whoIsWinning());
+        }else if(isDeuceAdvantage()){
+            return MessageFormat.format("Advantage, player {0}", whoIsWinning());
         }
-
+        if(isDeuce()){
+            return "Deuce";
+        }
 
         String result = MessageFormat.format("Player A : {0} / Player B : {1}", translateScoreToString(repository.getScoreA()), translateScoreToString(repository.getScoreB()));
         return result;
@@ -63,6 +67,25 @@ public class TennisScoreRules {
 
     private Player whoIsWinning() {
         return (repository.getScoreA() > repository.getScoreB()) ? Player.A : Player.B;
+    }
+
+    /**
+     * If both players have 40 points the players are “deuce”.
+     * If the game is in deuce, the winner of the ball will have advantage
+     * @return Deuce mode or not
+     */
+    private boolean isDeuce() {
+        return repository.getScoreA()  >= 3 && repository.getScoreB()  >= 3;
+    }
+
+    private boolean isDeuceAdvantage() {
+        if ((repository.getScoreA() >= 3 && repository.getScoreA() == repository.getScoreB() + 1) ||
+            (repository.getScoreB() >= 3 && repository.getScoreB() == repository.getScoreA() + 1)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private String translateScoreToString(int score) throws IllegalArgumentException {

@@ -12,7 +12,6 @@ public class ScoreRepository {
         this.scoreB = 0;
     }
 
-
     /**
      * possible to mock up the score
      * @param scoreA
@@ -27,16 +26,8 @@ public class ScoreRepository {
         return scoreB;
     }
 
-    public void setScoreB(int scoreB) {
-        this.scoreB = scoreB;
-    }
-
     public int getScoreA() {
         return scoreA;
-    }
-
-    public void setScoreA(int scoreA) {
-        this.scoreA = scoreA;
     }
 
     public void incrementScoreA() {
